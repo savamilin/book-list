@@ -1,0 +1,187 @@
+function Book(title, author, stars) {
+
+    this.title = title;
+    this.author = author;
+    this.stars = stars;
+}
+
+
+// konekcija sa localstorage-om
+Book.prototype.findItemInLocalStorage = function() {
+
+    // pronalazimo da li ima u localSorage niz books
+    var valueInLocalStorage = JSON.parse(localStorage.getItem('books'))
+    console.log(localStorage)
+
+    //ako u localStorage-u nema key(books)(tj nema niz books) i undefind je, onda pridodaj u localStorage
+    if (!valueInLocalStorage) {
+        const info = []
+
+        localStorage.setItem('books', JSON.stringify(info))
+    }
+
+    return valueInLocalStorage
+}
+
+// pridodavanje na localStorage
+Book.prototype.addItemToLocalSorage = function() {
+
+    //pozovi funkciju za vracanje niza iz localStorage-a
+    const item = this.findItemInLocalStorage()
+    console.log('item', item)
+
+    const row = {
+        'title': this.title,
+        'author': this.author,
+        'stars': this.stars,
+        // pozvao metod da mi izgenerise html tagove za zvezde
+        'rating': this.makeStars()
+    }
+    item.push(row)
+
+    localStorage.setItem('books', JSON.stringify(item))
+
+}
+
+Book.prototype.error = function() {
+
+    const showError = document.getElementById('error')
+    showError.style.color = 'red'
+    showError.style.fontSize = '20px'
+    showError.textContent = 'you have to enter all three fields'
+
+}
+
+Book.prototype.makeStars = function() {
+
+    var newStars = ''
+
+    for (var i = 0; i < parseInt(this.stars); i++) {
+
+        newStars += `<i class="fas fa-star"></i>`
+    }
+
+    return newStars
+}
+
+// izbacivanje iz localSotage posle refresovanja stranice
+const item = Book.prototype.findItemInLocalStorage()
+console.log(item)
+
+const tbody = document.getElementById('tbody')
+var output = ''
+
+if (item) {
+
+    for (var i = 0; i < item.length; i++) {
+
+        output +=
+            `
+         <tr>
+            <td>${item[i].title}</td>
+            <td>${item[i].author}</td>
+            <td>${item[i].rating}</td>
+            <td><i class="fas fa-backspace"></></td>
+         </tr>
+        `
+        console.log(output)
+
+    }
+}
+tbody.innerHTML += output
+
+
+// kada korisnik pridoda knjigu
+document.getElementById('submit').addEventListener('click', addBook)
+
+function addBook(e) {
+
+    var title = document.getElementById('title').value
+    var authr = document.getElementById('authr').value
+    var stars = document.getElementById('stars').value
+
+
+    if (!title || !authr || !stars) {
+
+        Book.prototype.error()
+
+        // izbrisi poruku posle 2 sekunde
+        setTimeout(function() {
+
+            document.getElementById('error').innerHTML = ''
+        }, 2000)
+
+    } else {
+
+        const newBook = new Book(title, authr, stars)
+        console.log(newBook)
+
+        console.log('newBook', newBook.findItemInLocalStorage())
+        newBook.addItemToLocalSorage()
+
+
+        const tbody = document.getElementById('tbody')
+        console.log(tbody)
+
+        var output =
+            `
+             <tr>
+                <td>${newBook.title}</td>
+                <td>${newBook.author}</td>
+                <td>${newBook.makeStars()}</td>
+                <td><i class="fas fa-backspace"></i></td>
+             </tr>
+            `
+        console.log(output)
+
+        tbody.innerHTML += output
+
+        //    brisanje vrednosti iz inputa posle unosenja vrednosti
+        var title = document.getElementById('title').value = ''
+        var authr = document.getElementById('authr').value = ''
+        var stars = document.getElementById('stars').value = ''
+    }
+
+    e.preventDefault()
+}
+
+
+const deleteBook = document.querySelector('#tbody')
+console.log(deleteBook)
+
+
+// koristim event delegation
+deleteBook.addEventListener('click', function(e) {
+
+
+    // ako postoji clasa sa ovim imeno samo nju targetiraj na eventu
+    if (e.target.classList.contains('fa-backspace')) {
+
+        if (confirm('are you sure')) {
+
+            console.log(e.target)
+                // uzimam podatke iz localStorage
+            const itemForDelet = Book.prototype.findItemInLocalStorage()
+
+            // izbrisati u UI elelment
+            e.target.parentElement.parentElement.remove()
+
+            console.log(itemForDelet)
+
+            // izmanupulisati niz iz localStorage(izbaciti iz niza ono sto je korisnik kliknuo)
+            itemForDelet.forEach(function(item, index) {
+
+
+
+                    // ako je title(ko je u ovom slucaju kao id-posto ne postoje 2 knjige sa istim imenom) i u ubjektu title onda pronadji u nizu taj objekat i obrisi
+                    if (e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent === item.title) {
+
+                        itemForDelet.splice(index, 1)
+                        console.log('newItem', itemForDelet)
+                    }
+                })
+                //ubacujemo novi niz u localStorage 
+            localStorage.setItem('books', JSON.stringify(itemForDelet))
+        }
+    }
+})

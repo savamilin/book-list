@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+
+    <div id="container">
+
+        <h1 class="my-4 text-primary ">Make your book list</h1>
+
+        <div id="error" class="my-4"></div>
+        <form action="" id="books" class="mb-4">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="title" placeholder="Enter title">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="authr" placeholder="Enter authr">
+            </div>
+
+            <div class="form-group">
+                <input type="number" class="form-control" id="stars" placeholder="pitck stars up to 5" min="1" max="5">
+            </div>
+
+            <button type="button" id="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">title</th>
+                    <th scope="col">authr</th>
+                    <th scope="col">rating</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+
+
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/6e82de4fac.js" crossorigin="anonymous"></script>
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
